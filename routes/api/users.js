@@ -1,8 +1,10 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { check, validationResult } = require("express-validator");
 const router = express.Router();
 const isEmpty = require("../../utils/isEmpty");
+const config = require("../../config");
 
 const User = require("../../models/User");
 
@@ -79,6 +81,18 @@ router.put(
       }
 
       // validated! challenge create the token and return it to the user.
+
+      User.findOneByIdAndUpate(user.id, { lastLogin: Date.now() });
+
+      const payload = {
+        id: user.id,
+        email: user.email,
+        //iat: Date
+      };
+
+      const token = jwt.sign(payload, config.secretOrKey, {});
+
+      return res.json(token);
     } catch (error) {
       console.error(error);
       res.status(500).json(error);
