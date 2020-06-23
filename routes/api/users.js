@@ -82,7 +82,7 @@ router.put(
 
       // validated! challenge create the token and return it to the user.
 
-      User.findOneByIdAndUpate(user.id, { lastLogin: Date.now() });
+      User.findByIdAndUpdate(user.id, { lastLogin: Date.now() });
 
       const payload = {
         id: user.id,
@@ -99,7 +99,5 @@ router.put(
     }
   }
 );
-
-router.put();
 
 module.exports = router;

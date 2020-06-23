@@ -10,8 +10,10 @@ app.use(cors());
 app.use(express.json());
 
 const users = require("./routes/api/users");
+const profiles = require("./routes/api/profiles");
 
 app.use("/api/users", users);
+app.use("/api/profiles", profiles);
 
 mongoose.connect(
   config.mongoURI,
