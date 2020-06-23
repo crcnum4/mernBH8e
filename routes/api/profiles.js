@@ -72,4 +72,7 @@ router.post(
   }
 );
 
+// get /self return logged in users profile data. authenticated route
+// get / return all profiles - hacker challenge one -> exclude logged in user from results. Hint: query hacker challenge 2 -> exclued location data. Hint: Projections
+
 module.exports = router;
