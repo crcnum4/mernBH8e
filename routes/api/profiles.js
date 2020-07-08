@@ -1,6 +1,5 @@
 // create the post (register profile) route. for now make it a public url and expect userid in the body.
 const express = require("express");
-const config = require("config");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 
@@ -23,6 +22,8 @@ router.post(
     check("firstName", "first name is required").not().isEmpty(),
     check("lastName", "Last name is required").not().isEmpty(),
     check("educationLevel", "Education level is required").not().isEmpty(),
+    check("githubUrl", "Invalid URL").optional().isURL(),
+    check("twitterUrl", "Invalid URL").optional().isURL(),
   ],
   async (req, res) => {
     console.log(req.body);
@@ -38,18 +39,20 @@ router.post(
         educationLevel,
         certifications,
         location,
-        social,
+        githubUrl,
+        twitterUrl,
+        youtubeUrl,
         summary,
       } = req.body;
 
       const userId = req.user.id;
 
       const profileFields = {
-        firstName,
-        lastName,
-        name: `${firstName} ${lastName}`,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
         educationLevel,
       };
+      profileFields.name = `${profileFields.firstName} ${profileFields.lastName}`;
       profileFields.user = userId;
       if (occupation) profileFields.occupation = occupation;
       if (certifications) profileFields.certifications = certifications;
@@ -57,11 +60,9 @@ router.post(
       if (summary) profileFields.summary = summary;
 
       profileFields.social = {};
-      if (social.githubUrl) profileFields.social.githubUrl = social.githubUrl;
-      if (social.twitterUrl)
-        profileFields.social.twitterUrl = social.twitterUrl;
-      if (social.youtubeUrl)
-        profileFields.social.youtubeUrl = social.youtubeUrl;
+      if (githubUrl) profileFields.social.githubUrl = githubUrl;
+      if (twitterUrl) profileFields.social.twitterUrl = twitterUrl;
+      if (youtubeUrl) profileFields.social.youtubeUrl = youtubeUrl;
 
       const profile = await Profile.create(profileFields);
       res.json(profile);

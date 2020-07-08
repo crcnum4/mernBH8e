@@ -28,7 +28,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
     const { email, password } = req.body;
-    const userData = { email, password };
+    const userData = { email: email.toLowerCase(), password };
 
     try {
       const salt = await bcrypt.genSalt(10);
@@ -68,7 +68,7 @@ router.put(
     }
 
     try {
-      const user = await User.findOne({ email: req.body.email });
+      const user = await User.findOne({ email: req.body.email.toLowerCase() });
 
       if (isEmpty(user)) {
         return req.status(404).json({ email: "email not found" });
