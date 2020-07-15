@@ -1,26 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-/*
-    posterName: "Joel",
-    resourceAuthor: "Traversy Media",
-    authorSkillLevel: "Advance",
-    cohort: "8",
-    title: "React JS Crash Crourse",
-    categories: ["React"],
-    summary: "Code along about React on youtube",
-    link: "https://www.youtube.com/watch?v=sBws8MSXN7A",
-    resourceType: "Crash Course",
-    datePublished: "2018-09-10.00:00:00.000z",
-    videoLength: null,
-    timeToComplete: 180,
-    rating: 5,
-    comments: [
-      { user: "john", text: "Great video with clear instructions" },
-      { user: "Bella", text: "Simple and straight to the point." },
-    ],
-*/
-
 const commentSchema = new Schema(
   {
     profile: {
@@ -28,7 +8,7 @@ const commentSchema = new Schema(
       ref: "profiles",
     },
     text: String,
-    // TODO likes maybe dislikes too
+    likes: { type: [Schema.Types.ObjectId], default: [] },
   },
   { timestamps: {} }
 );
@@ -38,7 +18,7 @@ const postSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "profiles",
   },
-  author: String,
+  author: { type: String, required: true },
   skillLevel: {
     type: String,
     enum: [
@@ -50,12 +30,13 @@ const postSchema = new Schema({
       "Senior",
       "Lead",
     ],
+    required: true,
   },
   cohort: String,
-  title: String,
+  title: { type: String, required: true },
   categories: { type: [String], default: [] },
   summary: String,
-  link: String,
+  link: { type: String, required: true },
   resourceType: {
     type: "String",
     enum: [
@@ -71,12 +52,19 @@ const postSchema = new Schema({
       "Blog",
       "Other",
     ],
+    required: true,
   },
   publishedAt: Date,
   videoLength: Number,
   timeToComplete: Number,
+  cost: { type: Number, required: true },
   comments: { type: [commentSchema], default: [] },
-  // TODO raiting
+  // TODO rating
+  // only users and rate once. need id and score, [objects id and the score]
+  rating: {
+    type: [{ user: mongoose.Schema.Types.ObjectId, score: Number }],
+    default: [],
+  },
 });
 
 module.exports = Post = mongoose.model("posts", postSchema);

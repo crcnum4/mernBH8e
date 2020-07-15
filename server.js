@@ -11,9 +11,11 @@ app.use(express.json());
 
 const users = require("./routes/api/users");
 const profiles = require("./routes/api/profiles");
+const posts = require("./routes/api/posts");
 
 app.use("/api/users", users);
 app.use("/api/profiles", profiles);
+app.use("/api/posts", posts);
 
 mongoose.connect(
   config.mongoURI,
