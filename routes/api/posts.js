@@ -53,9 +53,9 @@ router.post(
     check("cost", "Cost is required").notEmpty(),
     check("cost", "A valid number is required").isNumeric(),
     check("publishedAt", "Invalid Date").optional().isISO8601(),
-    check("videoLength", "Length of Video must be a number")
+    check("videoLength", "Length of Video must be in whole minutes")
       .optional()
-      .isNumeric(),
+      .isInt(),
     check("timeToComplete", "Time it took to complete must be a number")
       .optional()
       .isNumeric(),
@@ -66,7 +66,25 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    res.json(req.body);
+
+    //David
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      const profileId = profile._id;
+
+      // find profile with userId so we can extract the profile._id
+      // attach the profileId to the postData
+      const postData = { ...req.body };
+      postData.poster = profileId;
+      // create a new post
+
+      const post = await Post.create(postData);
+      res.json(post);
+      // respond with new post
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error);
+    }
   }
 );
 
