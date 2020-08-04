@@ -38,10 +38,10 @@ const profileSchema = new Schema(
       ],
       required: true,
     },
-    resourceId: {
-      type: [Schema.Types.ObjectId],
-      ref: "resources",
-    },
+    // resourceId: {
+    //   type: [Schema.Types.ObjectId],
+    //   ref: "posts",
+    // },
     certifications: [String],
     location: {
       city: String,

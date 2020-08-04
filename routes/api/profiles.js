@@ -123,6 +123,7 @@ router.put(
     }
   }
 );
+
 router.delete("/", auth, async (req, res) => {
   try {
     await Profile.findOneAndRemove({ user: req.user.id });
@@ -132,6 +133,4 @@ router.delete("/", auth, async (req, res) => {
     res.status(500).json({ msg: "Server Error." });
   }
 });
-module.exports = router;
-
 module.exports = router;
