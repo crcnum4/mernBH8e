@@ -61,10 +61,11 @@ const postSchema = new Schema({
   comments: { type: [commentSchema], default: [] },
   // TODO rating
   // only users and rate once. need id and score, [objects id and the score]
-  rating: {
-    type: [{ user: mongoose.Schema.Types.ObjectId, score: Number }],
-    default: [],
-  },
+  // rating: {
+  //   type: [{ user: mongoose.Schema.Types.ObjectId, score: Number }],
+  //   default: [],
+  // },
+  likes: { type: [mongoose.Schema.Types.ObjectId], default: [] },
 });
 
 module.exports = Post = mongoose.model("posts", postSchema);

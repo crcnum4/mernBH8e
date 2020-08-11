@@ -188,8 +188,61 @@ router.delete("/:id", auth, async (req, res) => {
     res.status(500).json(error);
   }
 });
-// epic: find and delete the post by id and return success message to requester.
 
-// return to request success
+// @route		PUT api/posts/:postID/like
+// @desc		like a post based on ID
+// @access	private
+router.put("/:postID/like", auth, async (req, res) => {
+  try {
+    let post;
+    if (req.body.like) {
+      // add the user id to likes
+      post = await Post.findByIdAndUpdate(
+        req.params.postID,
+        {
+          $addToSet: { likes: req.user.id },
+        },
+        { new: true }
+      );
+    } else {
+      // remove the specific userid from likes
+      post = await Post.findByIdAndUpdate(
+        req.params.postID,
+        {
+          $pull: { likes: req.user.id },
+        },
+        { new: true }
+      );
+    }
+    return res.json(post.likes.length);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json(error);
+  }
+});
+
+// *** non-locking version *** //
+// router.put('/:postID/like', auth, async (req,res) =>{
+//   try {
+//     const post = await Post.findById(req.params.postID);
+//     if(!post)  {
+//       return res.status(404).json({ msg: 'Post Not Found' });
+//     }
+//     const like = req.body.like;
+//     if(like) {
+//        post.likes.push(req.user.id);
+//     } else {
+//       const index = post.likes.indexOf(req.user.id);
+//       post.likes.splice(index, 1);
+//     }
+//     post.save();
+//     res.json(post.likes.length);
+//   } catch (error) {
+//     console.error(error);
+//       res.status(500).json(error);
+//   }
+// })
+
+//epic: add or remove a like from the user to a post and return the like count.
 
 module.exports = router;
