@@ -56,11 +56,11 @@ router.delete("/:postID/:commentID", auth, async (req, res) => {
     if (!post) {
       return res.status(404).json({ msg: "Post not found" });
     }
-    const index = post.comments.findIndex(
+    const comment = post.comments.find(
       (comment) => comment.id === req.params.commentID
     );
 
-    if (index === -1) {
+    if (!comment) {
       return res.status(404).json({ msg: "Comment not found" });
     }
 
@@ -69,9 +69,9 @@ router.delete("/:postID/:commentID", auth, async (req, res) => {
     if (profile.id !== post.comments[index].profile) {
       return res.status(401).json({ msg: "Unauthorized" });
     }
-    post.comments.splice(index, 1);
-    post.save();
-    res.json(post.comments);
+    const updatedPost = await Post.findByIdAndUpdate(req.params.postID, {
+      $pull: { comments: { id: req.params.id, profile: profile.id } },
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json(error);
