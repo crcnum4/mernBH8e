@@ -6,7 +6,6 @@ const { check, validationResult } = require("express-validator");
 
 const Post = require("../../models/Post");
 const Profile = require("../../models/Profile");
-const User = require("../../models/User");
 
 const postValidator = [
   check("author", "Author is required").notEmpty(),
@@ -243,6 +242,7 @@ router.put("/:postID/like", auth, async (req, res) => {
 //   }
 // })
 
-//epic: add or remove a like from the user to a post and return the like count.
+//route api/posts/comments
+// app.use('/comments')
 
 module.exports = router;
