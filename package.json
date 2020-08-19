@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js --ignore ./client",
+    "client": "npm start --prefix client",
+    "app": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,6 @@
   "homepage": "https://github.com/crcnum4/mernBH8e#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "concurrently": "^5.2.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-validator": "^6.5.0",
@@ -28,6 +29,7 @@
     "mongoose": "^5.9.18"
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
     "nodemon": "^2.0.4"
   }
 }
